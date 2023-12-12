@@ -1,21 +1,22 @@
 <template>
   <div class="login">
     <div style="width: 500px; margin: 50px auto; padding: 30px 50px; background: #fff;">
-      <h1 style="text-align: center; margin: 20px 0;">管理员登录</h1>
+      <h1 style="text-align: center; margin: 20px 0;">管理者登録</h1>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="ユーザー" prop="username">
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="パスワード" prop="password">
           <el-input v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">ログイン</el-button>
+          <el-button @click="resetForm('ruleForm')">リセツト</el-button>
         </el-form-item>
       </el-form>
       <div style="text-align: center;">
-        <el-link href="/sys-admin/">后台管理（临时，不需要登录即可跳转）</el-link>
+        <el-link href="/sys-admin/">バックグラウンド管理(一時的、ログイン不要でジャンプできます)</el-link>
+   
       </div>
     </div>
   </div>
