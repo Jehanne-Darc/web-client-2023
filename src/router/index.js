@@ -9,6 +9,7 @@ const routes = [
         path: '/sys-admin',
         component: () => import('../views/HomeView.vue'),
         redirect: '/sys-admin/index',
+        name: 'Home',
         children: [
             {
                 path: 'temp/album/add-new', // /sys-admin/temp/album/add-new
