@@ -58,6 +58,11 @@ const routes = [
         component: () => import('../views/AboutView.vue')
     },
     {
+        path: '/chat',
+        component: () => import('../views/ChatView.vue'),
+        name: 'ChatApp',
+    },
+    {
         path: '/',
         component: LoginView
     }

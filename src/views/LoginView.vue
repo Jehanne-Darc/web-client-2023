@@ -46,7 +46,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = 'http://localhost:9999/users/login';
+          let url = 'http://localhost:8888/users/login';
           console.log('尝试登录')
           console.log('请求路径为:' + url)
           console.log('请求参数为:' + this.ruleForm)
@@ -60,7 +60,7 @@ export default {
                 message: '登录成功',
                 type: 'success'
               });
-              this.$router.push({name: 'Home'})
+              this.$router.push({name: 'ChatApp'})
             } else {
               console.log('登录失败,用户名或密码错误')
               this.$notify.error({
