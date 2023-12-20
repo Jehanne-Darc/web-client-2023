@@ -1,6 +1,17 @@
 <template>
   <div id="app">
-    <el-row class="title">SNSソフト・社内ボット</el-row>
+    <el-row class="title"
+      >SNSソフト・社内ボット
+      <el-dropdown class="title-menu">
+        <span class="el-dropdown-link"> ☰ </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click="showPersonalInfo"
+            >個人情報</el-dropdown-item
+          >
+          <el-dropdown-item @click="logout">ログアウト</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </el-row>
     <el-row class="content">
       <el-col
         v-for="(message, index) in messages"
@@ -17,10 +28,11 @@
       </el-col>
     </el-row>
     <el-row class="footer">
-      <el-col :span="3">
+      <el-col :span="1">
         <el-button
           icon="el-icon-plus"
           circle
+          class="custom-purple-button file-upload-button"
           @click="triggerFileInput"
         ></el-button>
         <input
@@ -31,16 +43,21 @@
           style="display: none"
         />
       </el-col>
-      <el-col :span="17">
+      <el-col :span="20">
         <el-input
           type="text"
           v-model="userMessage"
-          @keyup.enter="sendMessage"
+          @keypress.enter.native="sendMessage"
           placeholder="メッセージを入力"
+          class="custom-input-style"
         ></el-input>
       </el-col>
-      <el-col :span="4">
-        <el-button :disabled="!isInputNotEmpty" @click="sendMessage"
+      <el-col :span="2">
+        <el-button
+          :class="[
+            userMessage.trim() ? 'custom-purple-button' : 'light-purple-button',
+          ]"
+          @click="sendMessage"
           >送信</el-button
         >
       </el-col>
@@ -82,6 +99,12 @@ export default {
         this.userMessage = "";
       }
     },
+    showPersonalInfo() {
+      // 处理显示个人信息的逻辑
+    },
+    logout() {
+      // 处理退出登录的逻辑
+    },
   },
   watch: {
     userMessage(newVal) {
@@ -94,7 +117,7 @@ export default {
 <style>
 body,
 html {
-  background-color: #ffffff;
+  background-color: #FAF0E6 !important;
   font-family: "Arial", sans-serif;
   height: 100%;
   margin: 0;
@@ -119,11 +142,26 @@ html {
   color: #ffffff;
   font-size: 1.5rem;
   border-radius: 50px;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+  position: relative;
+}
+
+.title-menu {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white;
+}
+
+#app .el-dropdown .el-dropdown-menu .el-dropdown-item {
+  font-weight: bold;
 }
 
 .content {
@@ -155,38 +193,33 @@ html {
   bottom: 5px;
 }
 
+.user-message,
+.bot-message {
+  position: relative;
+  padding: 0.5rem 15px;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  min-width: 15%;
+  max-width: 30%;
+  word-wrap: break-word;
+  display: inline-block;
+}
+
 .user-message {
   align-self: flex-end;
   background-color: #dddddd;
   color: #000000;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 10px;
-  max-width: 70%;
 }
 
 .bot-message {
   align-self: flex-start;
   background-color: #a6e1fa;
   color: #000000;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 10px;
-  max-width: 70%;
-}
-
-.user-message,
-.bot-message {
-  max-width: 60%;
-  position: relative;
-  padding-right: 15px;
-  padding-left: 15px;
 }
 
 .footer {
   width: 1200px;
   height: 4rem;
-  color: #ffffff;
   font-size: 2rem;
   border-radius: 50px;
   position: fixed;
@@ -199,60 +232,49 @@ html {
   padding-right: 10px;
 }
 
-.footer > input {
-  width: 87%;
-  height: 3rem;
-  border: 1px solid #8f138f;
-  outline: none;
-  border-radius: 50px;
-  padding: 0 1rem;
-  font-size: 1.5rem;
-  background-color: #d3bce2;
+.custom-input-style .el-input__inner {
+  border-radius: 20px;
+  border-color: #d3bce2;
   color: #000000;
 }
 
-.file-upload-button button {
-  background-color: #7a4988;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 10px;
+.custom-input-style .el-input__inner::placeholder {
+  color: #000000;
 }
 
-.btu button {
+.custom-input-style .el-input__inner:-ms-input-placeholder {
+  color: #000000;
+}
+
+.custom-input-style .el-input__inner::-moz-placeholder {
+  color: #000000;
+  opacity: 1;
+}
+
+.custom-purple-button {
+  background-color: #8f138f;
+  color: white;
+}
+
+.light-purple-button {
   background-color: #d3bce2;
-  color: white;
-  border: none;
+  color: purple;
+}
+
+.custom-purple-button,
+.light-purple-button {
   border-radius: 20px;
-  padding: 15px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
 }
 
-.btu button.btn-active {
-  background-color: #7a4988;
+.file-upload-button {
+  margin-right: 0;
 }
 
-.btu button:hover {
-  background-color: #9b59b6;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.3);
-}
-
-.btu button:active {
-  background-color: #6d398b;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+.send-button {
+  margin-left: 20px;
 }
 
 input[type="file"] {
