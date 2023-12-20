@@ -89,7 +89,6 @@ export default {
           text: this.userMessage,
           isUser: true,
         });
-        // 模拟回复
         setTimeout(() => {
           this.messages.push({
             text: "これは自動応答です",
@@ -99,12 +98,8 @@ export default {
         this.userMessage = "";
       }
     },
-    showPersonalInfo() {
-      // 处理显示个人信息的逻辑
-    },
-    logout() {
-      // 处理退出登录的逻辑
-    },
+    showPersonalInfo() {},
+    logout() {},
   },
   watch: {
     userMessage(newVal) {
@@ -127,8 +122,8 @@ html {
 
 #app {
   background-size: cover;
-  max-width: 1200px;
-  min-width: 900px;
+  max-width: 100%;
+  min-width: 0;
   height: auto;
   margin: 0 auto;
 }
@@ -142,7 +137,6 @@ html {
   color: #ffffff;
   font-size: 1.5rem;
   border-radius: 50px;
-  /* position: fixed; */
   top: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -218,7 +212,7 @@ html {
 }
 
 .footer {
-  width: 1200px;
+  width: 100%;
   height: 4rem;
   font-size: 2rem;
   border-radius: 50px;
@@ -282,26 +276,59 @@ input[type="file"] {
 }
 
 @media (max-width: 768px) {
+  body,
+  html {
+    font-size: 14px;
+  }
+
+  .title,
   .footer {
-    flex-direction: column;
+    width: 100%;
+    position: relative;
+  }
+
+  .user-message,
+  .bot-message {
+    max-width: 100%;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
     align-items: center;
-    padding: 10px 0;
+    box-sizing: border-box;
   }
 
   .footer > .el-col {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .el-dropdown-menu {
+    flex: 1;
     display: flex;
-    flex-direction: row;
     justify-content: center;
+    align-items: center;
   }
 
-  .el-dropdown-menu .el-dropdown-item {
-    display: inline-block;
-    margin-right: 10px;
+  .file-upload-button {
+    flex: 0 0 auto;
+    padding: 0 10px;
+  }
+
+  .custom-input-style .el-input__inner {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    min-width: 0;
+    margin: 0 10px;
+  }
+
+  .custom-purple-button,
+  .light-purple-button {
+    flex: 0 0 auto;
+    padding: 0 10px;
   }
 }
 </style>
