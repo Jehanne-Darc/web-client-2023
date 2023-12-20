@@ -1,35 +1,50 @@
 <template>
   <div id="app">
-    <div class="title">SNSソフト・社内ボット</div>
-    <div class="content">
-      <div
+    <el-row class="title">SNSソフト・社内ボット</el-row>
+    <el-row class="content">
+      <el-col
         v-for="(message, index) in messages"
         :key="index"
-        :class="{ 'user-message': message.isUser }"
+        :span="24"
+        :class="{
+          'user-message': message.isUser,
+          'bot-message': !message.isUser,
+        }"
       >
         {{ message.text }}
-      </div>
-    </div>
-    <div class="footer">
-      <label for="fileInput" class="file-upload-button">
-        +
+        <span v-if="message.isUser" class="arrow-right"></span>
+        <span v-else class="arrow-left"></span>
+      </el-col>
+    </el-row>
+    <el-row class="footer">
+      <el-col :span="3">
+        <el-button
+          icon="el-icon-plus"
+          circle
+          @click="triggerFileInput"
+        ></el-button>
         <input
           type="file"
           id="fileInput"
+          ref="fileInput"
           @change="handleFileChange"
           style="display: none"
         />
-      </label>
-      <input
-        type="text"
-        v-model="userMessage"
-        @keyup.enter="sendMessage"
-        placeholder="メッセージを入力"
-      />
-      <div class="btu" @click="sendMessage">
-        <img src="../assets//plane.png" alt="" />
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="17">
+        <el-input
+          type="text"
+          v-model="userMessage"
+          @keyup.enter="sendMessage"
+          placeholder="メッセージを入力"
+        ></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-button :disabled="!isInputNotEmpty" @click="sendMessage"
+          >送信</el-button
+        >
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -37,31 +52,40 @@
 export default {
   data() {
     return {
-      userMessage: "", // 用户输入的消息
-      messages: [], // 存储用户发送的消息的数组
+      userMessage: "",
+      messages: [],
       selectedFile: null,
+      isInputNotEmpty: false,
+      showPrompt: false,
     };
   },
   methods: {
     handleFileChange(event) {
       this.selectedFile = event.target.files[0];
     },
-    uploadFile() {
-      if (this.selectedFile) {
-        console.log("選択済ファイル:", this.selectedFile.name);
-      } else {
-        console.log("ファイルをアップロードしてください。");
-      }
+    triggerFileInput() {
+      this.$refs.fileInput.click();
     },
     sendMessage() {
-      // 在这里可以执行发送消息的相关操作，例如将消息添加到数组
       if (this.userMessage.trim() !== "") {
         this.messages.push({
           text: this.userMessage,
-          isUser: true, // 标记为用户发送的消息
+          isUser: true,
         });
-        this.userMessage = ""; // 清空输入框
+        // 模拟回复
+        setTimeout(() => {
+          this.messages.push({
+            text: "これは自動応答です",
+            isUser: false,
+          });
+        }, 1000);
+        this.userMessage = "";
       }
+    },
+  },
+  watch: {
+    userMessage(newVal) {
+      this.isInputNotEmpty = newVal.trim() !== "";
     },
   },
 };
@@ -70,8 +94,7 @@ export default {
 <style>
 body,
 html {
-  background-color: #ffffff; /* 白色背景 */
-  /* 设置为白色 */
+  background-color: #ffffff;
   font-family: "Arial", sans-serif;
   height: 100%;
   margin: 0;
@@ -80,6 +103,7 @@ html {
 }
 
 #app {
+  background-size: cover;
   max-width: 1200px;
   min-width: 900px;
   height: auto;
@@ -87,8 +111,7 @@ html {
 }
 
 .title {
-  z-index: 20;
-  width: 1200px;
+  width: 100%;
   height: 3rem;
   line-height: 3rem;
   text-align: center;
@@ -98,22 +121,66 @@ html {
   border-radius: 50px;
   position: fixed;
   top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  margin-top: 3rem;
+  padding-top: 3rem;
+}
+
+.arrow-right {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #dddddd;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  position: absolute;
+  right: -5px;
+  bottom: 5px;
+}
+
+.arrow-left {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #a6e1fa;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  position: absolute;
+  left: -5px;
+  bottom: 5px;
 }
 
 .user-message {
   align-self: flex-end;
-  background-color: #dddddd; /* 灰色背景 */
-  color: #000000; /* 黑色字体 */
+  background-color: #dddddd;
+  color: #000000;
   padding: 0.5rem;
   margin: 0.5rem 0;
   border-radius: 10px;
   max-width: 70%;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background-color: #a6e1fa;
+  color: #000000;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.user-message,
+.bot-message {
+  max-width: 60%;
+  position: relative;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .footer {
@@ -128,6 +195,8 @@ html {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .footer > input {
@@ -138,45 +207,55 @@ html {
   border-radius: 50px;
   padding: 0 1rem;
   font-size: 1.5rem;
-  background-color: #d9cad9;
+  background-color: #d3bce2;
   color: #000000;
 }
 
-.footer > button {
+.file-upload-button button {
+  background-color: #7a4988;
+  color: white;
   border: none;
-  border-radius: 50px;
-  background-color: #8f138f;
-  width: 3rem;
-  height: 3rem;
-  font-size: 2rem;
-  color: #ffffff;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin: 0 10px;
 }
 
-.file-upload-button,
-.btu {
-  cursor: pointer;
+.btu button {
+  background-color: #d3bce2;
+  color: white;
   border: none;
-  border-radius: 50px;
-  background-color: #8f138f;
-  width: 3rem;
-  height: 3rem;
-  font-size: 2rem;
-  color: #ffffff;
+  border-radius: 20px;
+  padding: 15px 15px;
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btu button.btn-active {
+  background-color: #7a4988;
+}
+
+.btu button:hover {
+  background-color: #9b59b6;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btu button:active {
+  background-color: #6d398b;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 input[type="file"] {
   display: none;
-}
-
-.footer > .btu > img {
-  width: 1.4rem;
-  height: 1.4rem;
 }
 </style>
