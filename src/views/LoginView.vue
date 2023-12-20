@@ -52,7 +52,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = 'http://localhost:9999/users/login';
+          var localPath = this.GLOBAL.localSrc;
+          let url = localPath + '/users/login';
           console.log('尝试登录')
           console.log('请求路径为:' + url)
           console.log('请求参数为:' + this.ruleForm)
@@ -72,6 +73,8 @@ export default {
                 message: 'ログインが成功しました.',
                 type: 'success'
               });
+              const token = response.data.data.token;
+              localStorage.setItem('token', token);
               this.$router.push({name: 'ChatApp'})
             } else {
               console.log('ログインに失敗しました。ユーザー名またはパスワードが正しくありません.')
