@@ -6,7 +6,7 @@
       <el-header class="layout-header">
         <h1>シャークの運営管理プラットフォーム</h1>
       </el-header>
-      <!-- 下半部分 -->
+      <!-- 下半部分  -->
       <el-container class="layout-body">
         <!-- 下半部分的左侧边栏 -->
         <el-aside class="layout-aside">
