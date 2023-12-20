@@ -284,7 +284,15 @@ input[type="file"] {
 @media (max-width: 768px) {
   .footer {
     width: 100%;
-    position: relative;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10; /* 确保footer在最上层 */
+  }
+
+  /* 为body或主要内容区域添加足够的底部内边距 */
+  body {
+    padding-bottom: 4rem; /* 至少与footer的高度一致 */
   }
 }
 </style>
