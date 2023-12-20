@@ -117,7 +117,7 @@ export default {
 <style>
 body,
 html {
-  background-color: #FAF0E6 !important;
+  background-color: #faf0e6 !important;
   font-family: "Arial", sans-serif;
   height: 100%;
   margin: 0;
@@ -279,5 +279,12 @@ html {
 
 input[type="file"] {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    width: 100%;
+    position: relative;
+  }
 }
 </style>
