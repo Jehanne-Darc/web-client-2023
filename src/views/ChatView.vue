@@ -283,16 +283,25 @@ input[type="file"] {
 
 @media (max-width: 768px) {
   .footer {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 10; /* 确保footer在最上层 */
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
   }
 
-  /* 为body或主要内容区域添加足够的底部内边距 */
-  body {
-    padding-bottom: 4rem; /* 至少与footer的高度一致 */
+  .footer > .el-col {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .el-dropdown-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .el-dropdown-menu .el-dropdown-item {
+    display: inline-block;
+    margin-right: 10px;
   }
 }
 </style>
