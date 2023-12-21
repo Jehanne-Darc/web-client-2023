@@ -108,6 +108,9 @@ export default {
               text: botResponse,
               isUser: false,
             });
+
+            // 在下一个 DOM 更新周期后滚动到底部
+            this.$nextTick(this.scrollToBottom);
           } else {
             console.error("API response error:", response.data);
             this.messages.push({
@@ -124,9 +127,9 @@ export default {
         this.isButtonDisabled = false;
         this.userMessage = "";
         // 在消息发送后调用滚动到底部的方法
-        this.$nextTick(() => {
-          this.scrollToBottom();
-        });
+        // this.$nextTick(() => {
+        //   this.scrollToBottom();
+        // });
       }
     },
     scrollToBottom() {
