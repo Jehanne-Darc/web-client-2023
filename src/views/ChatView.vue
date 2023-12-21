@@ -22,9 +22,8 @@
           'bot-message': !message.isUser,
         }"
       >
-      <v-card-text v-html="parseHTML(message.text)">
-      </v-card-text>
-      <!-- {{ message.text }} -->
+        <v-card-text v-html="parseHTML(message.text)"> </v-card-text>
+        <!-- {{ message.text }} -->
       </el-col>
     </el-row>
     <el-row class="footer footer-row">
@@ -83,6 +82,10 @@ export default {
           text: this.userMessage,
           isUser: true,
         });
+
+        // 滚动到底部
+        this.$nextTick(this.scrollToBottom);
+
         try {
           var localPath = this.GLOBAL.localSrc;
           const token = localStorage.getItem("token");
@@ -123,9 +126,9 @@ export default {
         } catch (error) {
           console.error("API request error:", error);
           this.$notify.error({
-                          title: '失敗しました.',
-                          message: error
-                        });
+            title: "失敗しました.",
+            message: error,
+          });
         }
         // 加载完成后设置为false
         this.isLoading = false;
@@ -154,8 +157,8 @@ export default {
       localStorage.removeItem("token"); // 或者使用 sessionStorage
       this.$router.push("/");
     },
-    parseHTML: function(message) {
-       return message.replace(/\n/g, '<br>');  // 将换行符替换为HTML的<br>标签
+    parseHTML: function (message) {
+      return message.replace(/\n/g, "<br>"); // 将换行符替换为HTML的<br>标签
     },
   },
   watch: {
