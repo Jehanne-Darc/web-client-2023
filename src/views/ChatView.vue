@@ -123,7 +123,17 @@ export default {
         this.isInputDisabled = false;
         this.isButtonDisabled = false;
         this.userMessage = "";
+        // 在消息发送后调用滚动到底部的方法
+        this.$nextTick(() => {
+          this.scrollToBottom();
+        });
       }
+    },
+    scrollToBottom() {
+      // 获取内容区域的元素
+      const content = this.$el.querySelector(".content");
+      // 滚动到底部
+      content.scrollTop = content.scrollHeight;
     },
     showPersonalInfo() {
       // 处理显示个人信息的逻辑
@@ -198,6 +208,7 @@ html {
   flex-direction: column;
   margin-top: 3rem;
   padding-top: 3rem;
+  padding-bottom: 4rem;
 }
 
 .user-message,
