@@ -1,3 +1,7 @@
+<head>
+<!-- 其他头部内容 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
 <template>
   <div class="login">
     <div class="login-form">
@@ -96,32 +100,37 @@ export default {
   }
 };
 </script>
-<style >
-  body {
-    background-color: #faf0e6 !important;
-    
-  }
+<style>
+body {
+  background-color: #faf0e6 !important;
+
+}
 </style>
 <style scoped>
 
 
 .login-form {
-  width: 500px;
-  margin: 50px auto;
-  padding: 30px 50px;
+  width: 100%; /* 使用100%宽度，充满整个屏幕 */
+  box-sizing: border-box; /* 使padding不会撑大宽度 */
+  padding: 20px; /* 减小padding，以适应小屏幕 */
   background: #fff;
+  margin: 0; /* 取消上下边距，以充分利用空间 */
 }
 
-@media only screen and (max-width: 600px) {
-  .login-form {
-    width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    margin: 10px 0;
+/* 如果需要保持在大屏幕上的一些样式，可以使用媒体查询 */
+  @media only screen and (min-width: 600px) {
+    .login-form {
+      width: 500px; /* 在大屏幕上保持原有宽度 */
+      margin: 50px auto; /* 保持上下居中 */
+    padding: 30px 50px;
   }
 }
+
+h1 {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 1.5em;
+}
+
+
 </style>
