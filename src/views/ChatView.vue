@@ -23,27 +23,10 @@
         }"
       >
         {{ message.text }}
-        <span v-if="message.isUser" class="arrow-right"></span>
-        <span v-else class="arrow-left"></span>
       </el-col>
     </el-row>
-    <el-row class="footer">
-      <el-col :span="1">
-        <el-button
-          icon="el-icon-plus"
-          circle
-          class="custom-purple-button file-upload-button"
-          @click="triggerFileInput"
-        ></el-button>
-        <input
-          type="file"
-          id="fileInput"
-          ref="fileInput"
-          @change="handleFileChange"
-          style="display: none"
-        />
-      </el-col>
-      <el-col :span="20">
+    <el-row class="footer footer-row">
+      <el-col :span="16">
         <el-input
           type="text"
           v-model="userMessage"
@@ -71,18 +54,11 @@ export default {
     return {
       userMessage: "",
       messages: [],
-      selectedFile: null,
       isInputNotEmpty: false,
       showPrompt: false,
     };
   },
   methods: {
-    handleFileChange(event) {
-      this.selectedFile = event.target.files[0];
-    },
-    triggerFileInput() {
-      this.$refs.fileInput.click();
-    },
     sendMessage() {
       if (this.userMessage.trim() !== "") {
         this.messages.push({
@@ -129,7 +105,7 @@ html {
 }
 
 .title {
-  width: 100%;
+  max-width: 90%;
   height: 3rem;
   line-height: 3rem;
   text-align: center;
@@ -165,38 +141,18 @@ html {
   padding-top: 3rem;
 }
 
-.arrow-right {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background-color: #dddddd;
-  clip-path: polygon(100% 0, 0 50%, 100% 100%);
-  position: absolute;
-  right: -5px;
-  bottom: 5px;
-}
-
-.arrow-left {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background-color: #a6e1fa;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-  position: absolute;
-  left: -5px;
-  bottom: 5px;
-}
-
 .user-message,
 .bot-message {
   position: relative;
-  padding: 0.5rem 15px;
   margin: 0.5rem 0;
-  border-radius: 10px;
   min-width: 15%;
   max-width: 30%;
   word-wrap: break-word;
   display: inline-block;
+  border-radius: 20px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 12px;
 }
 
 .user-message {
@@ -218,30 +174,60 @@ html {
   border-radius: 50px;
   position: fixed;
   bottom: 0;
+  align-items: center;
+  padding: 0;
+}
+
+.footer-row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+}
+
+.footer > .el-col {
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.footer > .el-col:nth-child(1) {
+  margin-right: 10px;
+}
+
+.footer > .el-col:nth-child(2) {
+  margin-right: 5px;
+}
+
+.footer > .el-col:nth-child(3) {
+  margin-left: 5px;
+}
+
+.footer > .el-col:nth-child(1),
+.footer > .el-col:nth-child(3) {
+  margin: 0 5px;
 }
 
 .custom-input-style .el-input__inner {
+  width: 100%;
   border-radius: 20px;
   border-color: #d3bce2;
   color: #000000;
+  min-height: 36px;
+  height: auto;
+  margin: 0;
 }
 
 .custom-input-style .el-input__inner::placeholder {
-  color: #000000;
+  color: #808080;
 }
 
 .custom-input-style .el-input__inner:-ms-input-placeholder {
-  color: #000000;
+  color: #808080;
 }
 
 .custom-input-style .el-input__inner::-moz-placeholder {
-  color: #000000;
+  color: #808080;
   opacity: 1;
 }
 
@@ -257,18 +243,9 @@ html {
 
 .custom-purple-button,
 .light-purple-button {
-  border-radius: 20px;
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-}
-
-.file-upload-button {
-  margin-right: 0;
-}
-
-.send-button {
-  margin-left: 20px;
+  border-radius: 25px;
+  padding: 10px 15px;
+  font-size: 1.2rem;
 }
 
 input[type="file"] {
@@ -289,7 +266,7 @@ input[type="file"] {
 
   .user-message,
   .bot-message {
-    max-width: 100%;
+    max-width: 60px;
   }
 
   .footer {
@@ -297,7 +274,7 @@ input[type="file"] {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 4rem;
+    height: 50px;
     padding: 5px;
     display: flex;
     justify-content: space-around;
@@ -306,29 +283,26 @@ input[type="file"] {
   }
 
   .footer > .el-col {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0 5px;
   }
 
   .file-upload-button {
-    flex: 0 0 auto;
-    padding: 0 10px;
+    flex: 0 0 36px;
+    padding: 0;
   }
 
   .custom-input-style .el-input__inner {
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: auto;
-    min-width: 0;
-    margin: 0 10px;
+    flex-basis: 60%;
+    min-width: 150px;
+    margin: 0 5px;
   }
 
   .custom-purple-button,
   .light-purple-button {
-    flex: 0 0 auto;
-    padding: 0 10px;
+    flex: 0 0 72px;
+    padding: 0 20px;
   }
 }
 </style>
