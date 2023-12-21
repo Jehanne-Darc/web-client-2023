@@ -42,16 +42,21 @@
             userMessage.trim() ? 'custom-purple-button' : 'light-purple-button',
           ]"
           @click="sendMessage"
-          :disabled="isButtonDisabled"
-          >送信</el-button
+          :disabled="isButtonDisabled || isLoading"
         >
+          <template v-if="isLoading">
+            <!-- 这里可以使用Element UI的Loading组件或自定义等待图标 -->
+            <i class="el-icon-loading"></i>
+          </template>
+          <template v-else> 送信 </template>
+        </el-button>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   data() {
     return {
@@ -61,55 +66,42 @@ export default {
       showPrompt: false,
       isInputDisabled: false,
       isButtonDisabled: false,
+      isLoading: false,
     };
   },
   methods: {
-    
-
-    // sendMessage() {
-    //   if (this.userMessage.trim() !== "") {
-    //     this.messages.push({
-    //       text: this.userMessage,
-    //       isUser: true,
-    //     });
-    //     // 模拟回复
-    //     setTimeout(() => {
-    //       this.messages.push({
-    //         text: "これは自動応答です",
-    //         isUser: false,
-    //       });
-    //     }, 1000);
-    //     this.userMessage = "";
-    //   }
-    // },
-    async  sendMessage() {
+    async sendMessage() {
       if (this.userMessage.trim() !== "") {
+        // 开始加载时设置为true
+        this.isLoading = true;
         // 在发送请求前禁用输入框
         this.isInputDisabled = true;
-        this.isButtonDisabled  = true;
+        this.isButtonDisabled = true;
         this.messages.push({
           text: this.userMessage,
           isUser: true,
         });
-        // Simulate a response from the bot
-        // this.messages.push({ text: "Bot response...", type: "bot" });
-      try {
+        try {
           var localPath = this.GLOBAL.localSrc;
-          const token = localStorage.getItem('token');
+          const token = localStorage.getItem("token");
           // 发送 API 请求
-          const response = await axios.post('/api/chat/sendMessage', {
-            message: this.userMessage
-          }, {
-            headers: {
-              'Content-Type': 'application/json',
-              'token':token
+          const response = await axios.post(
+            "/api/chat/sendMessage",
+            {
+              message: this.userMessage,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                token: token,
+              },
             }
-          });
+          );
 
           // 处理 API 响应
           if (response.data && response.data.state === 20000) {
             const botResponse = response.data.data;
-            const formattedResponse = botResponse.replace(/\\n/g, '\n');
+            const formattedResponse = botResponse.replace(/\\n/g, "\n");
 
             // 将机器人的响应添加到 messages 数组中
             this.messages.push({
@@ -123,12 +115,14 @@ export default {
               isUser: false,
             });
           }
-      } catch (error) {
-        console.error("API request error:", error);
-      }
-      this.isInputDisabled = false;
-      this.isButtonDisabled  = false;
-      this.userMessage = "";
+        } catch (error) {
+          console.error("API request error:", error);
+        }
+        // 加载完成后设置为false
+        this.isLoading = false;
+        this.isInputDisabled = false;
+        this.isButtonDisabled = false;
+        this.userMessage = "";
       }
     },
     showPersonalInfo() {
@@ -138,8 +132,8 @@ export default {
     logout() {
       console.log("132");
       // 清除本地存储中的 Token
-      localStorage.removeItem('token'); // 或者使用 sessionStorage
-      this.$router.push('/');
+      localStorage.removeItem("token"); // 或者使用 sessionStorage
+      this.$router.push("/");
     },
   },
   watch: {
@@ -161,8 +155,6 @@ html {
 }
 </style>
 <style scoped>
-
-
 #app {
   background-size: cover;
   max-width: 100%;
@@ -301,7 +293,6 @@ html {
 .custom-purple-button {
   background-color: #8f138f;
   color: white;
-  display: none;
 }
 
 .light-purple-button {
@@ -314,6 +305,11 @@ html {
   border-radius: 25px;
   padding: 10px 15px;
   font-size: 1.2rem;
+}
+
+/* 添加等待图标的样式 */
+.el-icon-loading {
+  /* 这里可以自定义样式，例如旋转动画等 */
 }
 
 input[type="file"] {
