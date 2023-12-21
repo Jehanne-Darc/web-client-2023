@@ -53,7 +53,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var localPath = this.GLOBAL.localSrc;
-          let url = localPath + '/users/login';
+          let url = '/api/users/login';
           console.log('尝试登录')
           console.log('请求路径为:' + url)
           console.log('请求参数为:' + this.ruleForm)
@@ -96,11 +96,14 @@ export default {
   }
 };
 </script>
+<style >
+  body {
+    background-color: #faf0e6 !important;
+    
+  }
+</style>
+<style scoped>
 
-<style>
-body {
-  background-color: #0f66bb !important;
-}
 
 .login-form {
   width: 500px;

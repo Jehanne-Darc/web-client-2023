@@ -5,10 +5,10 @@
       <el-dropdown class="title-menu">
         <span class="el-dropdown-link"> ☰ </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click="showPersonalInfo"
+          <el-dropdown-item @click.native="showPersonalInfo"
             >個人情報</el-dropdown-item
           >
-          <el-dropdown-item @click="logout">ログアウト</el-dropdown-item>
+          <el-dropdown-item @click.native="logout">ログアウト</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-row>
@@ -33,6 +33,7 @@
           @keypress.enter.native="sendMessage"
           placeholder="メッセージを入力"
           class="custom-input-style"
+          :disabled="isInputDisabled"
         ></el-input>
       </el-col>
       <el-col :span="2">
@@ -41,6 +42,7 @@
             userMessage.trim() ? 'custom-purple-button' : 'light-purple-button',
           ]"
           @click="sendMessage"
+          :disabled="isButtonDisabled"
           >送信</el-button
         >
       </el-col>
@@ -49,6 +51,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -56,26 +59,88 @@ export default {
       messages: [],
       isInputNotEmpty: false,
       showPrompt: false,
+      isInputDisabled: false,
+      isButtonDisabled: false,
     };
   },
   methods: {
-    sendMessage() {
+    
+
+    // sendMessage() {
+    //   if (this.userMessage.trim() !== "") {
+    //     this.messages.push({
+    //       text: this.userMessage,
+    //       isUser: true,
+    //     });
+    //     // 模拟回复
+    //     setTimeout(() => {
+    //       this.messages.push({
+    //         text: "これは自動応答です",
+    //         isUser: false,
+    //       });
+    //     }, 1000);
+    //     this.userMessage = "";
+    //   }
+    // },
+    async  sendMessage() {
       if (this.userMessage.trim() !== "") {
+        // 在发送请求前禁用输入框
+        this.isInputDisabled = true;
+        this.isButtonDisabled  = true;
         this.messages.push({
           text: this.userMessage,
           isUser: true,
         });
-        setTimeout(() => {
-          this.messages.push({
-            text: "これは自動応答です",
-            isUser: false,
+        // Simulate a response from the bot
+        // this.messages.push({ text: "Bot response...", type: "bot" });
+      try {
+          var localPath = this.GLOBAL.localSrc;
+          const token = localStorage.getItem('token');
+          // 发送 API 请求
+          const response = await axios.post('/api/chat/sendMessage', {
+            message: this.userMessage
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+              'token':token
+            }
           });
-        }, 1000);
-        this.userMessage = "";
+
+          // 处理 API 响应
+          if (response.data && response.data.state === 20000) {
+            const botResponse = response.data.data;
+            const formattedResponse = botResponse.replace(/\\n/g, '\n');
+
+            // 将机器人的响应添加到 messages 数组中
+            this.messages.push({
+              text: botResponse,
+              isUser: false,
+            });
+          } else {
+            console.error("API response error:", response.data);
+            this.messages.push({
+              text: response.data.message,
+              isUser: false,
+            });
+          }
+      } catch (error) {
+        console.error("API request error:", error);
+      }
+      this.isInputDisabled = false;
+      this.isButtonDisabled  = false;
+      this.userMessage = "";
       }
     },
-    showPersonalInfo() {},
-    logout() {},
+    showPersonalInfo() {
+      // 处理显示个人信息的逻辑
+      console.log("132");
+    },
+    logout() {
+      console.log("132");
+      // 清除本地存储中的 Token
+      localStorage.removeItem('token'); // 或者使用 sessionStorage
+      this.$router.push('/');
+    },
   },
   watch: {
     userMessage(newVal) {
@@ -84,8 +149,7 @@ export default {
   },
 };
 </script>
-
-<style>
+<style >
 body,
 html {
   background-color: #faf0e6 !important;
@@ -95,6 +159,9 @@ html {
   padding: 0;
   box-sizing: border-box;
 }
+</style>
+<style scoped>
+
 
 #app {
   background-size: cover;
@@ -234,6 +301,7 @@ html {
 .custom-purple-button {
   background-color: #8f138f;
   color: white;
+  display: none;
 }
 
 .light-purple-button {
