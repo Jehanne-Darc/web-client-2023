@@ -231,7 +231,7 @@ html {
   position: relative;
   margin: 0.5rem 0;
   min-width: 15%;
-  max-width: 58%;
+  max-width: 30%;
   word-wrap: break-word;
   display: inline-block;
   border-radius: 20px;
