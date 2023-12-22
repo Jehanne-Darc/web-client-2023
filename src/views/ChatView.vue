@@ -297,7 +297,7 @@ html {
 
 .custom-input-style .el-input__inner {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 30px;
   border-color: #d3bce2;
   color: #000000;
   min-height: 36px;
@@ -350,6 +350,11 @@ input[type="file"] {
     font-size: 14px;
   }
 
+  .content {
+    padding-top: 3.5rem;
+    padding-bottom: 5rem;
+  }
+
   .title,
   .footer {
     width: 100%;
@@ -358,7 +363,7 @@ input[type="file"] {
 
   .user-message,
   .bot-message {
-    max-width: 60px;
+    max-width: 90%;
   }
 
   .footer {
@@ -395,6 +400,12 @@ input[type="file"] {
   .light-purple-button {
     flex: 0 0 72px;
     padding: 0 20px;
+  }
+  /* 调整输入框和按钮的大小以适应小屏幕 */
+  .custom-input-style .el-input__inner,
+  .custom-purple-button,
+  .light-purple-button {
+    min-height: 3rem; /* 增加高度以便于触摸 */
   }
 }
 </style>
