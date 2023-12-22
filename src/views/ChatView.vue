@@ -82,10 +82,10 @@ export default {
           text: this.userMessage,
           isUser: true,
         });
-
-        // 滚动到底部
-        this.$nextTick(this.scrollToBottom);
-
+        // 使用 $nextTick 确保 DOM 更新后再滚动
+        this.$nextTick(() => {
+          this.scrollToBottom();
+        });
         try {
           var localPath = this.GLOBAL.localSrc;
           const token = localStorage.getItem("token");
@@ -113,9 +113,10 @@ export default {
               text: botResponse,
               isUser: false,
             });
-
-            // 在下一个 DOM 更新周期后滚动到底部
-            this.$nextTick(this.scrollToBottom);
+            // 确保在DOM更新后执行滚动操作
+            this.$nextTick(() => {
+              this.scrollToBottom();
+            });
           } else {
             console.error("API response error:", response.data);
             this.messages.push({
@@ -135,10 +136,6 @@ export default {
         this.isInputDisabled = false;
         this.isButtonDisabled = false;
         this.userMessage = "";
-        // 在消息发送后调用滚动到底部的方法
-        this.$nextTick(() => {
-          this.scrollToBottom();
-        });
       }
     },
     scrollToBottom() {
@@ -222,22 +219,25 @@ html {
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-bottom: 5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 7rem);
 }
 
 .user-message,
 .bot-message {
-  position: relative;
-  margin: 0.5rem 0;
-  min-width: 15%;
-  max-width: 30%;
+  max-width: 25%;
   word-wrap: break-word;
-  display: inline-block;
-  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
   padding: 10px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-bottom: 12px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
+  background-color: white;
+  border: 1px solid #eaeaea;
+  position: relative;
+  align-items: flex-start;
 }
 
 .user-message {
@@ -259,6 +259,8 @@ html {
   border-radius: 50px;
   position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   align-items: center;
   padding: 0;
 }
