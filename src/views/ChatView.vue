@@ -23,15 +23,16 @@
         }"
       >
         <v-card-text v-html="parseHTML(message.text)"> </v-card-text>
-        <!-- {{ message.text }} -->
       </el-col>
     </el-row>
     <el-row class="footer footer-row">
       <el-col :span="16">
         <el-input
-          type="text"
+          type="textarea"
           v-model="userMessage"
-          @keypress.enter.native="sendMessage"
+          @keydown.enter.prevent="onEnterPress"
+          @compositionstart="handleCompositionStart"
+          @compositionend="handleCompositionEnd"
           placeholder="メッセージを入力"
           class="custom-input-style"
           :disabled="isInputDisabled"
@@ -68,9 +69,33 @@ export default {
       isInputDisabled: false,
       isButtonDisabled: false,
       isLoading: false,
+      composing: false, // 跟踪输入法状态
     };
   },
   methods: {
+    onEnterPress() {
+      if (!this.composing) {
+        this.sendMessage();
+      }
+    },
+    handleCompositionStart() {
+      this.composing = true; // 输入法开始输入
+    },
+    handleCompositionEnd(event) {
+      this.composing = false; // 输入法结束输入
+    },
+    checkForNewLine(event) {
+      if (event.shiftKey && event.key === "Enter") {
+        return;
+      }
+      if (event.key === "Enter" && !event.shiftKey) {
+        if (!this.composing && this.isComposingEnded) {
+          event.preventDefault(); // 阻止回车键的默认行为
+          this.sendMessage();
+          this.isComposingEnded = false; // 重置标志
+        }
+      }
+    },
     async sendMessage() {
       if (this.userMessage.trim() !== "") {
         // 开始加载时设置为true
@@ -301,8 +326,12 @@ html {
   border-color: #d3bce2;
   color: #000000;
   min-height: 36px;
-  height: auto;
+  height: 36px;
   margin: 0;
+  padding: 4px 10px; /* 调整内部填充以垂直居中文本 */
+  overflow-y: hidden; /* 隐藏溢出的文本 */
+  font-size: 16px; /* 根据需要调整字体大小 */
+  line-height: 1.5; /* 根据需要调整行高 */
 }
 
 .custom-input-style .el-input__inner::placeholder {
