@@ -269,12 +269,14 @@ html {
   align-self: flex-end;
   background-color: #dddddd;
   color: #000000;
+  margin: 0 5% 0 0;  /*ユーザメッセージに余白を追加 */
 }
 
 .bot-message {
   align-self: flex-start;
   background-color: #a6e1fa;
   color: #000000;
+  margin: 0 0 0 5%; /*botメッセージに余白を追加 */
 }
 
 .footer {
@@ -365,9 +367,9 @@ html {
 }
 
 /* 添加等待图标的样式 */
-.el-icon-loading {
+/* .el-icon-loading { */
   /* 这里可以自定义样式，例如旋转动画等 */
-}
+/* } */
 
 input[type="file"] {
   display: none;
@@ -390,10 +392,10 @@ input[type="file"] {
     position: relative;
   }
 
-  .user-message,
+  /* .user-message,
   .bot-message {
     max-width: 90%;
-  }
+  } */
 
   .footer {
     position: fixed;
